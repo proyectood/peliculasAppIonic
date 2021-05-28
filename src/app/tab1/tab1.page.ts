@@ -10,6 +10,9 @@ import { Pelicula } from '../interfaces/interfaces';
 export class Tab1Page implements OnInit{
 
   peliculasRecientes: Pelicula[] = [];
+
+  peliculasPopulares: Pelicula[] = [];
+
   slidesOpts = {
     slidesPerView: 1.3,
     freeMode: true
@@ -21,6 +24,11 @@ export class Tab1Page implements OnInit{
     this.servicioDb.getFeature().subscribe( resp => {
       console.log('Respuesta: ', resp)
       this.peliculasRecientes = resp.results;
+    } );
+
+    this.servicioDb.getPopulares().subscribe( resp => {
+      console.log('Populares: ', resp)
+      this.peliculasPopulares = resp.results;
     } );
   }
 
