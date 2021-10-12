@@ -1,5 +1,7 @@
 {
   "name": "ejemplotabs",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

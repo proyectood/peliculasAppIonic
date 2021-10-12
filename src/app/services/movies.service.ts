@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { RespuestaMDB } from '../interfaces/interfaces';
+import { Genre, PeliculaDetalle, RespuestaCredits, RespuestaMDB } from '../interfaces/interfaces';
 import { environment } from 'src/environments/environment';
 
 const URL = environment.Url;
@@ -12,12 +12,14 @@ const apiKey = environment.apiKey;
 })
 export class MoviesService {
 
+  private popularesPage = 0;
+  generos: Genre[] = [];
+
   constructor(private http: HttpClient) { }
 
   private ejecutarQuery<T>(query: string){
     query = URL + query;
     query += `&api_key=${apiKey}&language=es&include_image_language=es`;
-    console.log('query: ', query)
     return this.http.get<T>(query);
   }
 
@@ -40,9 +42,31 @@ export class MoviesService {
   }
 
   getPopulares(){
-
-    const query = `/discover/movie?sort_by=popularity.desc`;
+    this.popularesPage++;
+    const query = `/discover/movie?sort_by=popularity.desc&page=${ this.popularesPage }`;
     return this.ejecutarQuery<RespuestaMDB>(query);; 
+  }
+
+  getPeliculaDetalle(id: string){
+    return this.ejecutarQuery<PeliculaDetalle>(`/movie/${ id }?a=1`);
+  }
+
+  getPeliculaActores(id: string){
+    return this.ejecutarQuery<RespuestaCredits>(`/movie/${ id }/credits?a=1`);
+  }
+
+  buscarPeliculas(txtBusqueda: string){
+    return this.ejecutarQuery(`/search/movie?query=${ txtBusqueda }`);
+  }
+
+  cargarGeneros(): Promise<Genre[]>{
+    return new Promise ( resolve => {
+      this.ejecutarQuery(`/genre/movie/list?a=1`).subscribe(resp => {
+        this.generos = resp['genres'];
+        resolve(this.generos);
+      });
+    });
+    
   }
 
 }

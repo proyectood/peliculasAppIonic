@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+import { DetalleComponent } from '../components/detalle/detalle.component';
+import { Pelicula } from '../interfaces/interfaces';
+import { MoviesService } from '../services/movies.service';
 
 @Component({
   selector: 'app-tab2',
@@ -7,6 +11,35 @@ import { Component } from '@angular/core';
 })
 export class Tab2Page {
 
-  constructor() {}
+  txtBuscar = "";
+  ideas : string[] = ['Spiderman', 'Avengers', 'El señor de los anillos', 'La vida es bella'];
+  peliculas: Pelicula[] = [];
+  buscando = false;
+
+  constructor(private servicioDb: MoviesService, private modalCtrl: ModalController) {}
+
+  buscar( event ){
+    const valor = event.detail.value;
+    console.log( valor );
+    if(valor.trim() == ''){
+      return;
+    }
+    this.buscando = true;
+    this.servicioDb.buscarPeliculas(valor).subscribe(resp => {
+      console.log( resp );
+      this.peliculas = resp['results'];
+      this.buscando = false;
+    });
+  }
+
+  async verDetalle(id: string){
+    const modal = await this.modalCtrl.create({
+      component: DetalleComponent,
+      componentProps: {
+        id
+      }
+    });
+    modal.present();
+  }
 
 }

@@ -22,13 +22,20 @@ export class Tab1Page implements OnInit{
 
   ngOnInit(){
     this.servicioDb.getFeature().subscribe( resp => {
-      console.log('Respuesta: ', resp)
       this.peliculasRecientes = resp.results;
     } );
 
+    this.getPopulares();
+  }
+
+  cargarMas(){
+    this.getPopulares();
+  }
+
+  getPopulares(){
     this.servicioDb.getPopulares().subscribe( resp => {
-      console.log('Populares: ', resp)
-      this.peliculasPopulares = resp.results;
+      const arrTemp = [...this.peliculasPopulares, ...resp.results];
+      this.peliculasPopulares = arrTemp;
     } );
   }
 
