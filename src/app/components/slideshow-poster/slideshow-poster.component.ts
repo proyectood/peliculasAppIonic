@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Pelicula } from '../../interfaces/interfaces';
 import { DetalleComponent } from '../detalle/detalle.component';
@@ -11,6 +11,7 @@ import { DetalleComponent } from '../detalle/detalle.component';
 export class SlideshowPosterComponent implements OnInit {
 
   @Input() peliculas: Pelicula[] = [];
+  @Output() recargar = new EventEmitter();
   
   slidesOpts = {
     slidesPerView: 3.5,
@@ -29,6 +30,12 @@ export class SlideshowPosterComponent implements OnInit {
       }
     });
     modal.present();
+    const { data } = await modal.onDidDismiss();
+    if(data.accion === 'recargar'){
+      this.recargar.emit();
+    }
   }
+
+
 
 }

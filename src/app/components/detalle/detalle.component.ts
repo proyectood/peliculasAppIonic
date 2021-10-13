@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Actores, PeliculaDetalle } from 'src/app/interfaces/interfaces';
 import { DataLocalService } from 'src/app/services/data-local.service';
@@ -29,20 +29,20 @@ export class DetalleComponent implements OnInit {
 
     this.servicioDb.getPeliculaDetalle( this.id ).subscribe(
       resp => {
-        console.log("Detalle de la pelicula: ",resp);
         this.pelicula = resp;
       }
     );
     this.servicioDb.getPeliculaActores( this.id ).subscribe(
       resp => {
-        console.log("Actores de la pelicula: ",resp);
         this.actores = resp.cast;
       }
     );
   }
 
   regresar(){
-    this.modalCtrl.dismiss();
+    this.modalCtrl.dismiss({
+      accion: 'recargar'
+    });
   }
 
   async favorito(){

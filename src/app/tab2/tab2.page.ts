@@ -20,13 +20,11 @@ export class Tab2Page {
 
   buscar( event ){
     const valor = event.detail.value;
-    console.log( valor );
     if(valor.trim() == ''){
       return;
     }
     this.buscando = true;
     this.servicioDb.buscarPeliculas(valor).subscribe(resp => {
-      console.log( resp );
       this.peliculas = resp['results'];
       this.buscando = false;
     });

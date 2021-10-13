@@ -15,7 +15,7 @@
         <h4>{{ pelicula.genero }}</h4>
       </ion-col>
     </ion-row>
-    <app-slideshow-poster [peliculas]="pelicula.peliculas"></app-slideshow-poster>
+    <app-slideshow-poster [peliculas]="pelicula.peliculas" (recargar)="recargar()"></app-slideshow-poster>
   </ion-grid>
 
 </div>
